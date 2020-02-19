@@ -1,4 +1,4 @@
-package spring.security.oauth.client.springsecurityoauthclientsample
+package sample
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
