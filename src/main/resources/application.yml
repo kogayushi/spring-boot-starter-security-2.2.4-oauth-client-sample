@@ -1,0 +1,30 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google: # TODO my-google的な別名も試したい
+            provider: google # providerIdをregistrationIdと違う名前を付けたい場合に定義する。用途不明。
+            client-id: 1020965598708-92fgqrg11qecasnduhoe2auhtgbc2vn3.apps.googleusercontent.com # http://localhost:8080でしか使えない。悪用不可能です！
+            client-secret: kPUvxFZfJcs58l5caRotR987 # http://localhost:8080でしか使えない。悪用不可能です！
+            client-authentication-method: post # 通常はpostを指定する。Financial-grade APIだとpostとbasicは使用してはいけないらしい。
+            authorization-grant-type: authorization_code # https://docs.spring.io/spring-security/site/docs/current/reference/html/oauth2.html#oauth2Client-client-registration
+            redirect-uri: http://localhost:8080/login/oauth2/code/google # 指定しなくてもこれと同じものが自動生成される
+            scope:
+              - openid
+              - profile
+              - email
+            client-name: google # 必須設定。自動生成されるログインページのリンクに使われる。調べた限りではログインページをカスタマイズするか無効にするのであれば設定しても意味がなさそう。。。
+        provider:
+          google:
+            issuer-uri: https://accounts.google.com
+#          facebook:
+#            authorization-uri:
+#            token-uri:
+#            user-info-uri:
+#            user-info-authentication-method:
+#            user-name-attribute:
+#            jwk-set-uri:
+#            issuer-uri:
+#          github:
+#          facebook:
