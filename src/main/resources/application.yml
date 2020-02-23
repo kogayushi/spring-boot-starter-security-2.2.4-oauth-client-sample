@@ -14,17 +14,26 @@ spring:
               - openid
               - profile
               - email
-            client-name: google # 必須設定。自動生成されるログインページのリンクに使われる。調べた限りではログインページをカスタマイズするか無効にするのであれば設定しても意味がなさそう。。。
+            client-name: google # 任意設定項目。自動生成されるログインページのリンクに使われる。ログインページをカスタマイズするか無効にするのであれば、設定しても意味がい（と思う）。
+          github:
+            provider: github
+            client-id: 8f4698875fd14e64b6f1
+            client-secret: f0b9e69b9b3dac3358739ccd92ec73d92a31562c
+            client-authentication-method: post
+            authorization-grant-type: authorization_code
+            redirect-uri: http://localhost:8080/login/oauth2/code/github
+            scope: # githubはopenid connectをサポートしてないのでscopeにopenidを指定できない
+              - read:user
+            client-name: github
         provider:
           google:
-            issuer-uri: https://accounts.google.com
-#          facebook:
-#            authorization-uri:
-#            token-uri:
-#            user-info-uri:
-#            user-info-authentication-method:
-#            user-name-attribute:
-#            jwk-set-uri:
-#            issuer-uri:
-#          github:
+            issuer-uri: https://accounts.google.com # 設定しておくと{issuer-uri}/.well-known/openid-configuration -> {issuer-uri}/.well-known/oauth-authorization-serverの順にリクエストを送って設定情報を読み出す
+            user-name-attribute: name
+          github:
+            authorization-uri: https://github.com/login/oauth/.well-known/oauth-authorization-server
+            token-uri: https://github.com/login/oauth/access_token
+            user-info-uri: https://api.github.com/user
+            user-info-authentication-method: post
+            user-name-attribute: name
+            # githubはmetadata endpointを提供してない（っぽい）ので、issuer-uriは使えない
 #          facebook:
