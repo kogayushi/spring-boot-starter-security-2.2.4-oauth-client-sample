@@ -37,7 +37,14 @@ spring:
             client-name: facebook
         provider:
           google:
-            issuer-uri: https://accounts.google.com # 設定しておくと{issuer-uri}/.well-known/openid-configuration -> {issuer-uri}/.well-known/oauth-authorization-serverの順にリクエストを送って設定情報を読み出す
+            # oidcのconfiguration endpointやoauthのmetadata endpointが提供されている場合、
+            # issuer-uriを設定すると必要な情報が自動的に設定される。
+            issuer-uri: https://accounts.google.com
+            # configuration endpointにより、以下のコメントアウト部分の内容が自動的に設定される
+            # authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+            # token-uri: https://oauth2.googleapis.com/token
+            # user-info-uri: https://openidconnect.googleapis.com/v1/userinfo
+            # user-info-authentication-method: post
             user-name-attribute: name
           github:
             authorization-uri: https://github.com/login/oauth/.well-known/oauth-authorization-server
