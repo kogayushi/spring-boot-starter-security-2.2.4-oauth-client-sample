@@ -25,6 +25,16 @@ spring:
             scope: # githubはopenid connectをサポートしてないのでscopeにopenidを指定できない
               - read:user
             client-name: github
+          facebook:
+            provider: facebook
+            client-id: 155750378738467
+            client-secret: f8ffbac666be3ff56ff30363a585b10e
+            client-authentication-method: post
+            authorization-grant-type: authorization_code
+            redirect-uri: http://localhost:8080/login/oauth2/code/facebook
+            scope: # facebookはopenid connectをサポートしてないのでscopeにopenidを指定できない
+              - email
+            client-name: facebook
         provider:
           google:
             issuer-uri: https://accounts.google.com # 設定しておくと{issuer-uri}/.well-known/openid-configuration -> {issuer-uri}/.well-known/oauth-authorization-serverの順にリクエストを送って設定情報を読み出す
@@ -36,4 +46,11 @@ spring:
             user-info-authentication-method: post
             user-name-attribute: name
             # githubはmetadata endpointを提供してない（っぽい）ので、issuer-uriは使えない
-#          facebook:
+          facebook:
+            authorization-uri: https://www.facebook.com/v6.0/dialog/oauth
+            token-uri: https://graph.facebook.com/v6.0/oauth/access_token
+            user-info-uri: https://graph.facebook.com/me?fields=id,name,email
+            user-info-authentication-method: post
+            user-name-attribute: name
+            # facebookはmetadata endpointを提供してない（っぽい）ので、issuer-uriは使えない
+
