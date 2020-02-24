@@ -4,7 +4,9 @@ spring:
       client:
         registration:
           google: # TODO my-google的な別名も試したい
-            provider: google # providerIdをregistrationIdと違う名前を付けたい場合に定義する。用途不明。
+            # providerは、providerIdをregistrationIdと違う名前を付けたい場合に定義する。
+            # 今回はログインに利用したプロバイダの永続化時に使用する文字列に採用するが、本来の用途は不明。
+            provider: google
             client-id: 1020965598708-92fgqrg11qecasnduhoe2auhtgbc2vn3.apps.googleusercontent.com # http://localhost:8080でしか使えない。悪用不可能です！
             client-secret: kPUvxFZfJcs58l5caRotR987 # http://localhost:8080でしか使えない。悪用不可能です！
             client-authentication-method: post # 通常はpostを指定する。Financial-grade APIだとpostとbasicは使用してはいけないらしい。
@@ -14,7 +16,7 @@ spring:
               - openid
               - profile
               - email
-            client-name: google # 任意設定項目。自動生成されるログインページのリンクに使われる。ログインページをカスタマイズするか無効にするのであれば、設定しても意味がい（と思う）。
+            client-name: google # 任意設定項目。自動生成されるログインページのリンクに使われる。ログインページをカスタマイズするか無効にするのであれば、設定しても意味がない（と思う）。
           github:
             provider: github
             client-id: 8f4698875fd14e64b6f1
