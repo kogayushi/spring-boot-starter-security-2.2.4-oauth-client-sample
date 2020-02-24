@@ -49,7 +49,7 @@ spring:
             # user-info-authentication-method: post
             user-name-attribute: name
           github:
-            authorization-uri: https://github.com/login/oauth/.well-known/oauth-authorization-server
+            authorization-uri: https://github.com/login/oauth/authorize
             token-uri: https://github.com/login/oauth/access_token
             user-info-uri: https://api.github.com/user
             user-info-authentication-method: post
