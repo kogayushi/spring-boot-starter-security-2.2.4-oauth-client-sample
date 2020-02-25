@@ -1,4 +1,4 @@
-package sample
+package sample.user
 
 data class MyUserPrincipal(
     val provider: String,

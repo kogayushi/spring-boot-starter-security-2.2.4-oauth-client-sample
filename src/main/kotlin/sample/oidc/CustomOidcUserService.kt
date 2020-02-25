@@ -1,9 +1,10 @@
-package sample
+package sample.oidc
 
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException
 import org.springframework.security.oauth2.core.oidc.user.OidcUser
+import sample.oidc.CustomOidcUser
 
 class CustomOidcUserService : OidcUserService() {
 

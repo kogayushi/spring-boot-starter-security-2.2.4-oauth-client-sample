@@ -1,4 +1,4 @@
-package sample
+package sample.eventlistener
 
 import org.slf4j.LoggerFactory
 import org.springframework.context.event.EventListener

@@ -1,4 +1,4 @@
-package sample
+package sample.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -8,9 +8,11 @@ import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService
 import org.springframework.security.oauth2.core.user.OAuth2User
+import sample.oidc.CustomOAuth2UserService
+import sample.oidc.CustomOidcUserService
 
 @Configuration
-class SampleWebConfiguratin : WebSecurityConfigurerAdapter() {
+class SampleWebConfiguration : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
         http.authorizeRequests()
