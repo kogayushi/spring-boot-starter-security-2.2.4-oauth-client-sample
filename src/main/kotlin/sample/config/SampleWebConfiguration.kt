@@ -10,6 +10,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService
 import org.springframework.security.oauth2.core.user.OAuth2User
 import sample.oidc.CustomOAuth2UserService
 import sample.oidc.CustomOidcUserService
+import sample.user.InMemoryMyUserPrincipalRepository
 
 @Configuration
 class SampleWebConfiguration : WebSecurityConfigurerAdapter() {
@@ -24,8 +25,11 @@ class SampleWebConfiguration : WebSecurityConfigurerAdapter() {
     }
 
     @Bean
-    fun oidcUserService(): OidcUserService = CustomOidcUserService()
+    fun oidcUserService(): OidcUserService = CustomOidcUserService(repository())
 
     @Bean
-    fun oAuth2UserService(): OAuth2UserService<OAuth2UserRequest, OAuth2User> = CustomOAuth2UserService()
+    fun oAuth2UserService(): OAuth2UserService<OAuth2UserRequest, OAuth2User> = CustomOAuth2UserService(repository())
+
+    @Bean
+    fun repository(): InMemoryMyUserPrincipalRepository = InMemoryMyUserPrincipalRepository()
 }
