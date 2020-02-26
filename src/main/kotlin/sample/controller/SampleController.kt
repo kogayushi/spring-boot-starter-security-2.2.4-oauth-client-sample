@@ -20,4 +20,16 @@ class SampleController {
         model.addAttribute("name", myUserPrincipal.name)
         return "index"
     }
+
+    @GetMapping("/userinfo")
+    fun userinfo(
+        @AuthenticationPrincipal oAuth2User: CustomOAuth2User,
+        model: Model):String {
+
+        // TODO 各IdPのuserinfoエンドポイントを叩いて、そのレスポンスをそのまま画面に表示する。こんな感じで呼び出したい。
+        // val userInfo:String = identityProviderApiFacade.userinfo()
+        model.addAttribute("userinfo", oAuth2User.toString())
+
+        return "userinfo"
+    }
 }

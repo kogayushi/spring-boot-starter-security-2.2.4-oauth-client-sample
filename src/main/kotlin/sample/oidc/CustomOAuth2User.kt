@@ -20,4 +20,8 @@ open class CustomOAuth2User(
             oAuth2User.attributes["email"] as String
         )
     }
+
+    override fun toString(): String {
+        return "CustomOAuth2User(userId=$userId, provider='$provider', providerId='$providerId', oAuth2User=$oAuth2User)"
+    }
 }
