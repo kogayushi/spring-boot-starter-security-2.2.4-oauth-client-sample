@@ -4,7 +4,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.context.event.EventListener
 import org.springframework.security.authentication.event.InteractiveAuthenticationSuccessEvent
 import org.springframework.stereotype.Component
-import sample.oidc.CustomOAuth2User
+import sample.oauth2.CustomOAuth2User
 import sample.user.InMemoryMyUserPrincipalRepository
 
 @Component

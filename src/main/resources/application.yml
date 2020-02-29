@@ -42,11 +42,15 @@ spring:
             # oidcのconfiguration endpointやoauthのmetadata endpointが提供されている場合、
             # issuer-uriを設定すると必要な情報が自動的に設定される。
             issuer-uri: https://accounts.google.com
-            # configuration endpointにより、以下のコメントアウト部分の内容が自動的に設定される
-            # authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+            # configuration endpointにより、以下のコメントアウト部分の同じ内容が自動的に設定される
+            # authorization-uri: "https://accounts.google.com/o/oauth2/v2/auth
             # token-uri: https://oauth2.googleapis.com/token
             # user-info-uri: https://openidconnect.googleapis.com/v1/userinfo
             # user-info-authentication-method: post
+
+            # refresh tokenを発行されるため同意画面を表示させる。googleの独自仕様だと思われる。
+            # https://developers.google.com/identity/protocols/OAuth2WebServer#offline
+            authorization-uri: "https://accounts.google.com/o/oauth2/v2/auth?access_type=offline"
             user-name-attribute: name
           github:
             authorization-uri: https://github.com/login/oauth/authorize

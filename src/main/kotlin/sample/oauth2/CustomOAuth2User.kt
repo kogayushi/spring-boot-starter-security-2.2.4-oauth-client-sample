@@ -1,4 +1,4 @@
-package sample.oidc
+package sample.oauth2
 
 import org.springframework.security.oauth2.core.user.OAuth2User
 import sample.user.MyUserPrincipal

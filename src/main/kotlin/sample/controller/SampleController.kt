@@ -4,11 +4,12 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
-import sample.oidc.CustomOAuth2User
+import sample.oauth2.CustomOAuth2User
+import sample.oauth2.OAuth2Client
 
 
 @Controller
-class SampleController {
+class SampleController(private val oAuth2Client: OAuth2Client) {
 
     @GetMapping("/")
     fun hello(
@@ -28,7 +29,7 @@ class SampleController {
 
         // TODO 各IdPのuserinfoエンドポイントを叩いて、そのレスポンスをそのまま画面に表示する。こんな感じで呼び出したい。
         // val userInfo:String = identityProviderApiFacade.userinfo()
-        model.addAttribute("userinfo", oAuth2User.toString())
+        model.addAttribute("userinfo", oAuth2Client.userInfo())
 
         return "userinfo"
     }

@@ -8,8 +8,8 @@ import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService
 import org.springframework.security.oauth2.core.user.OAuth2User
-import sample.oidc.CustomOAuth2UserService
-import sample.oidc.CustomOidcUserService
+import sample.oauth2.CustomOAuth2UserService
+import sample.oauth2.CustomOidcUserService
 import sample.user.InMemoryMyUserPrincipalRepository
 
 @Configuration
