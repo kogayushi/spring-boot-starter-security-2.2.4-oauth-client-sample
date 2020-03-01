@@ -1,5 +1,6 @@
 package sample.oauth2
 
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.client.ClientHttpRequestExecution
@@ -14,7 +15,6 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.client.web.HttpSessionOAuth2AuthorizedClientRepository
 import javax.servlet.http.HttpSession
 
-
 class OAuth2RestTemplateInterceptor(
     private val authorizedClientService: OAuth2AuthorizedClientService,
     private val session: HttpSession
@@ -23,8 +23,9 @@ class OAuth2RestTemplateInterceptor(
     private val refreshTokenOAuth2AuthorizedClientProvider = RefreshTokenOAuth2AuthorizedClientProvider()
 
     companion object {
-        private val DEFAULT_AUTHORIZED_CLIENTS_ATTR_NAME = HttpSessionOAuth2AuthorizedClientRepository::class.java.name + ".AUTHORIZED_CLIENTS"
-        private val SESSION_ATTRIBUTE_NAME = DEFAULT_AUTHORIZED_CLIENTS_ATTR_NAME
+        private val log = LoggerFactory.getLogger(OAuth2RestTemplateInterceptor::class.java)
+        // HttpSessionOAuth2AuthorizedClientRepositoryの実装でこの値でセッションに保存しているため踏襲している
+        private val SESSION_ATTRIBUTE_NAME = "${HttpSessionOAuth2AuthorizedClientRepository::class.java.name}.AUTHORIZED_CLIENTS"
     }
 
     override fun intercept(request: HttpRequest, body: ByteArray, execution: ClientHttpRequestExecution): ClientHttpResponse {
@@ -39,22 +40,26 @@ class OAuth2RestTemplateInterceptor(
         val response = execution.execute(request, body)
 
         if (response.statusCode == HttpStatus.UNAUTHORIZED) {
-
+            log.debug("identity provider returned unauthorized response. payload =>.", response.body)
             val context: OAuth2AuthorizationContext = OAuth2AuthorizationContext.withAuthorizedClient(authorizedClient)
                 .principal(oAuth2AuthenticationToken)
                 .build()
             val refreshed = refreshTokenOAuth2AuthorizedClientProvider.authorize(context)
             if (refreshed == null) {
+                log.debug("don't have refresh token")
                 return response
             }
 
+            log.debug("succeeded refreshing token.")
             val authorizedClients = session.getAttribute(SESSION_ATTRIBUTE_NAME) as MutableMap<String, OAuth2AuthorizedClient>
             authorizedClients[authorizedClient.clientRegistration.registrationId] = refreshed
             session.setAttribute(SESSION_ATTRIBUTE_NAME, authorizedClients)
+            log.debug("stored new access token adn refresh token in session.")
 
             return execution.execute(request, body)
         }
 
+        log.debug("access token is still valid")
         return response
 
     }
