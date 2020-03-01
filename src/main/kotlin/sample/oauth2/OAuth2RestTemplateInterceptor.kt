@@ -13,12 +13,15 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService
 import org.springframework.security.oauth2.client.RefreshTokenOAuth2AuthorizedClientProvider
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
 import org.springframework.security.oauth2.client.web.HttpSessionOAuth2AuthorizedClientRepository
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository
+import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpSession
 
 class OAuth2RestTemplateInterceptor(
-    private val authorizedClientService: OAuth2AuthorizedClientService,
-    private val session: HttpSession
-) : ClientHttpRequestInterceptor {
+    private val oAuth2AuthorizedClientRepository: OAuth2AuthorizedClientRepository,
+    private val session: HttpSession,
+    private val httpServletRequest:HttpServletRequest
+    ) : ClientHttpRequestInterceptor {
 
     private val refreshTokenOAuth2AuthorizedClientProvider = RefreshTokenOAuth2AuthorizedClientProvider()
 
@@ -31,9 +34,10 @@ class OAuth2RestTemplateInterceptor(
     override fun intercept(request: HttpRequest, body: ByteArray, execution: ClientHttpRequestExecution): ClientHttpResponse {
         val oAuth2AuthenticationToken = SecurityContextHolder.getContext().authentication as OAuth2AuthenticationToken
 
-        val authorizedClient: OAuth2AuthorizedClient = authorizedClientService.loadAuthorizedClient(
+        val authorizedClient: OAuth2AuthorizedClient = oAuth2AuthorizedClientRepository.loadAuthorizedClient(
             oAuth2AuthenticationToken.authorizedClientRegistrationId,
-            oAuth2AuthenticationToken.name
+            oAuth2AuthenticationToken,
+            httpServletRequest
         )
         request.headers.setBearerAuth(authorizedClient.accessToken.tokenValue)
 
@@ -56,6 +60,7 @@ class OAuth2RestTemplateInterceptor(
             session.setAttribute(SESSION_ATTRIBUTE_NAME, authorizedClients)
             log.debug("stored new access token adn refresh token in session.")
 
+            request.headers.setBearerAuth(authorizedClient.accessToken.tokenValue)
             return execution.execute(request, body)
         }
 
