@@ -59,7 +59,7 @@ class OAuth2RestTemplateInterceptor(
             return execution.execute(request, body)
         }
 
-        log.debug("access token is still valid")
+        log.debug("access token might be still valid")
         return response
 
     }
