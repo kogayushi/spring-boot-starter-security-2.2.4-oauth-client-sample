@@ -58,9 +58,9 @@ class OAuth2RestTemplateInterceptor(
             val authorizedClients = session.getAttribute(SESSION_ATTRIBUTE_NAME) as MutableMap<String, OAuth2AuthorizedClient>
             authorizedClients[authorizedClient.clientRegistration.registrationId] = refreshed
             session.setAttribute(SESSION_ATTRIBUTE_NAME, authorizedClients)
-            log.debug("stored new access token adn refresh token in session.")
+            log.debug("stored new access token and refresh token in session.")
 
-            request.headers.setBearerAuth(authorizedClient.accessToken.tokenValue)
+            request.headers.setBearerAuth(refreshed.accessToken.tokenValue)
             return execution.execute(request, body)
         }
 
