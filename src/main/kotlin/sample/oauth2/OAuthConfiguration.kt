@@ -10,20 +10,21 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.client.web.HttpSessionOAuth2AuthorizedClientRepository
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository
 import org.springframework.web.client.RestTemplate
-import org.springframework.web.context.annotation.RequestScope
+import org.springframework.web.context.annotation.SessionScope
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpSession
 
 @Configuration
 class OAuthConfiguration(
     private val builder: RestTemplateBuilder,
+    private val request: HttpServletRequest,
     private val session: HttpSession
 ) {
 
     // userInfoEndpointを動的にinjectするためにJavaConfigurationでDIコンテナに登録している
-    @RequestScope
+    @SessionScope
     @Bean
-    fun oAuth2Client(request: HttpServletRequest): OAuth2Client {
+    fun oAuth2Client(): OAuth2Client {
         val oAuth2AuthenticationToken = SecurityContextHolder.getContext().authentication as OAuth2AuthenticationToken
         val authorizedClient: OAuth2AuthorizedClient = httpSessionOAuth2AuthorizedClientRepository().loadAuthorizedClient(
             oAuth2AuthenticationToken.authorizedClientRegistrationId,
@@ -31,17 +32,15 @@ class OAuthConfiguration(
             request
         )
         val userInfoEndpoint = authorizedClient.clientRegistration.providerDetails.userInfoEndpoint
-        return OAuth2Client(userInfoEndpoint.uri, oAuth2RestTemplate(request))
+        return OAuth2Client(userInfoEndpoint.uri, oAuth2RestTemplate())
     }
 
     @Bean
-    fun oAuth2RestTemplate(request: HttpServletRequest): RestTemplate =
-        builder.additionalInterceptors(oAuth2RestTemplateInterceptor(request)).build()
+    fun oAuth2RestTemplate(): RestTemplate =
+        builder.additionalInterceptors(oAuth2RestTemplateInterceptor()).build()
 
     @Bean
-    fun oAuth2RestTemplateInterceptor(
-        request: HttpServletRequest
-    ): ClientHttpRequestInterceptor =
+    fun oAuth2RestTemplateInterceptor(): ClientHttpRequestInterceptor =
         OAuth2RestTemplateInterceptor(
             httpSessionOAuth2AuthorizedClientRepository(),
             session,
