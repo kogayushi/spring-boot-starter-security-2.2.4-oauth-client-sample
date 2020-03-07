@@ -16,6 +16,10 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-web"
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation "org.springframework.boot:spring-boot-starter-oauth2-client"
+//    jacksonを使った場合にOAuth2関係はsessionに保存できない？バグかなにかがありそう
+//    リリースされるまで様子見 => https://github.com/spring-projects/spring-security/issues/4886
+//    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+//    implementation 'org.springframework.session:spring-session-data-redis'
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin"
     implementation "org.jetbrains.kotlin:kotlin-reflect"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
