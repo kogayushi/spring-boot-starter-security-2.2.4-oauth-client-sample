@@ -1,6 +1,7 @@
 package sample.oauth2
 
 import org.slf4j.LoggerFactory
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.client.ClientHttpRequestExecution
@@ -9,7 +10,6 @@ import org.springframework.http.client.ClientHttpResponse
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.client.OAuth2AuthorizationContext
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService
 import org.springframework.security.oauth2.client.RefreshTokenOAuth2AuthorizedClientProvider
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
 import org.springframework.security.oauth2.client.web.HttpSessionOAuth2AuthorizedClientRepository
@@ -39,6 +39,15 @@ class OAuth2RestTemplateInterceptor(
             oAuth2AuthenticationToken,
             httpServletRequest
         )
+
+        // Identity Providerにはたまに"Bearer"を小文字(つまり"bearer")しか受け入れない実装が存在するので、そういうときはこう書く。
+        // request.headers.set(HttpHeaders.AUTHORIZATION, "bearer ${authorizedClient.accessToken.tokenValue}")
+        // 補足）
+        //    RFCに準拠するならばcase sensitiveに実装すべきなため、送受信双方ともヘッダ名を"Authorization"で値のプレフィックスを"Bearer"としなければいけない。
+        //    RFC 6750の https://tools.ietf.org/html/rfc6750#section-1.1 では、特に断りがない場合はプロトコルは原則case sensitiveと書かれているし、
+        //    さらに https://tools.ietf.org/html/rfc6750#section-2.1 では、文中において、わざわざダブルクォーテーションをつけてcase sensitiveであることを強調しているし、例も示している。
+        //    しかし、補足への補足になるが、RFCに完全に準拠するよりも「送信は厳格に､受信は寛大に」の原則に従って、
+        //    送信側は常に"Bearer"とし、入力側は大文字小文字を区別せずに"Bearer"でも"bearer"でも受け入れるのが望ましいと考え方もある。
         request.headers.setBearerAuth(authorizedClient.accessToken.tokenValue)
 
         val response = execution.execute(request, body)
