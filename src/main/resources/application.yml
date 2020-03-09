@@ -3,13 +3,15 @@ server:
     session:
       timeout: 24h
 spring:
+  redis:
+    host:
   security:
     oauth2:
       client:
         registration:
-          google: # TODO my-google的な別名も試したい
-            # providerは、providerIdをregistrationIdと違う名前を付けたい場合に定義する。
-            # 今回はログインに利用したプロバイダの永続化時に使用する文字列に採用するが、本来の用途は不明。
+          google: # registrationId
+            # providerは、spring.security.oauth2.client.provider.{id}をregistrationIdと違う名前を付けたい場合に定義する。
+            # 今回はログインに利用したプロバイダの永続化時に使用する文字列にも採用している。
             provider: google
             client-id: 1020965598708-92fgqrg11qecasnduhoe2auhtgbc2vn3.apps.googleusercontent.com # http://localhost:8080でしか使えない。悪用不可能です！
             client-secret: kPUvxFZfJcs58l5caRotR987 # http://localhost:8080でしか使えない。悪用不可能です！
@@ -55,7 +57,9 @@ spring:
             # refresh tokenを発行されるため同意画面を表示させる。googleの独自仕様だと思われる。
             # https://developers.google.com/identity/protocols/OAuth2WebServer#offline
             authorization-uri: "https://accounts.google.com/o/oauth2/v2/auth?access_type=offline"
-            user-name-attribute: name
+            jwt-set-uri: https://www.googleapis.com/oauth2/v3/certs
+
+            user-name-attribute: name #ユーザ名をどの属性から取得するかを指定する
           github:
             authorization-uri: https://github.com/login/oauth/authorize
             token-uri: https://github.com/login/oauth/access_token
