@@ -35,9 +35,16 @@ class OAuthConfiguration(
         return OAuth2Client(userInfoEndpoint.uri, oAuth2RestTemplate())
     }
 
+    // resttemplateはメンテナンスモードだったりはする
+    // https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#webmvc-resttemplate
+    // しかし、webclientを利用するにはwebfluxを依存に追加する必要があるが、 webclientのためだけに依存に追加したくないので、
+    // 今回はOauth2Clientでresttemplateの呼び出しをラップしておく。
+    // ラップしておくことで将来置き換える必要が生じてもコストを小さく済むはず。
     @Bean
     fun oAuth2RestTemplate(): RestTemplate =
-        builder.additionalInterceptors(oAuth2RestTemplateInterceptor()).build()
+        builder.additionalInterceptors(oAuth2RestTemplateInterceptor())
+            .additionalInterceptors(additionalHeaderInterceptor()) // 特定のCloud Providerを利用している場合などに、追加でヘッダーを共有される場合がある。
+            .build()
 
     @Bean
     fun oAuth2RestTemplateInterceptor(): ClientHttpRequestInterceptor =
@@ -48,7 +55,12 @@ class OAuthConfiguration(
         )
 
     @Bean
-    fun httpSessionOAuth2AuthorizedClientRepository(): OAuth2AuthorizedClientRepository = HttpSessionOAuth2AuthorizedClientRepository()
+    fun additionalHeaderInterceptor(): ClientHttpRequestInterceptor = ClientHttpRequestInterceptor { request, body, execution ->
+        request.headers.set("additional-header-name", "additional-header-value") // e.g. x-xxx-client-id
+        execution.execute(request, body)
+    }
 
+    @Bean
+    fun httpSessionOAuth2AuthorizedClientRepository(): OAuth2AuthorizedClientRepository = HttpSessionOAuth2AuthorizedClientRepository()
 }
 
