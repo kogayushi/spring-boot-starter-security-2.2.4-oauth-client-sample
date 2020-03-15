@@ -2,6 +2,7 @@ package sample.oauth2
 
 import org.springframework.security.oauth2.core.user.OAuth2User
 import sample.user.MyUserPrincipal
+import java.io.Serializable
 import java.util.UUID
 
 open class CustomOAuth2User(
@@ -9,7 +10,11 @@ open class CustomOAuth2User(
     private val provider: String,
     private val providerId: String,
     private val oAuth2User: OAuth2User
-) : OAuth2User by oAuth2User {
+) : OAuth2User by oAuth2User, Serializable {
+
+    companion object {
+        private const  val serialVersionUID = -123L
+    }
 
     fun toMyUserPrincipal(): MyUserPrincipal {
         return MyUserPrincipal(
@@ -24,4 +29,5 @@ open class CustomOAuth2User(
     override fun toString(): String {
         return "CustomOAuth2User(userId=$userId, provider='$provider', providerId='$providerId', oAuth2User=$oAuth2User)"
     }
+
 }
