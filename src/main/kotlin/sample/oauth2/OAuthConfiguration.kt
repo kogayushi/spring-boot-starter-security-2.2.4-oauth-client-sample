@@ -10,7 +10,7 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.client.web.HttpSessionOAuth2AuthorizedClientRepository
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository
 import org.springframework.web.client.RestTemplate
-import org.springframework.web.context.annotation.SessionScope
+import org.springframework.web.context.annotation.RequestScope
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpSession
 
@@ -22,7 +22,7 @@ class OAuthConfiguration(
 ) {
 
     // userInfoEndpointを動的にinjectするためにJavaConfigurationでDIコンテナに登録している
-    @SessionScope
+    @RequestScope
     @Bean
     fun oAuth2Client(): OAuth2Client {
         val oAuth2AuthenticationToken = SecurityContextHolder.getContext().authentication as OAuth2AuthenticationToken
