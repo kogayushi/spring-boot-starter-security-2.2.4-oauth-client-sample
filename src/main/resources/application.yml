@@ -76,3 +76,8 @@ spring:
             user-name-attribute: name
             # facebookはmetadata endpointを提供してない（っぽい）ので、issuer-uriは使えない
 
+logging:
+  level:
+    root: info
+    sample:
+      oauth2: debug
