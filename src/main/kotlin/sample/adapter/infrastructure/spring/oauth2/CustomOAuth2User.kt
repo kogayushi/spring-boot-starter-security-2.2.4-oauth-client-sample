@@ -24,7 +24,7 @@ open class CustomOAuth2User(
         this.provider,
         this.providerId,
         oAuth2User.name,
-        oAuth2User.attributes["email"] as String
+        oAuth2User.attributes["email"] as String // IdPによってはattribute名が違うかもしれない
     )
 
     // OAuth2User#toStringの出力内容が不要という場合は、こんな感じで独自実装する必要がある。
