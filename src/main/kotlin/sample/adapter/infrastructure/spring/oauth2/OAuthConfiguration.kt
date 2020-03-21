@@ -1,4 +1,4 @@
-package sample.oauth2
+package sample.adapter.infrastructure.spring.oauth2
 
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.context.annotation.Bean
@@ -22,7 +22,7 @@ class OAuthConfiguration(
 ) {
 
     // userInfoEndpointを動的にinjectするためにJavaConfigurationでDIコンテナに登録している
-    @RequestScope
+    @RequestScope // 本当はsession scopeにしたいが、injectionしているインスタンスにserializableじゃないものが含まれているのでできない。
     @Bean
     fun oAuth2Client(): OAuth2Client {
         val oAuth2AuthenticationToken = SecurityContextHolder.getContext().authentication as OAuth2AuthenticationToken
@@ -35,17 +35,18 @@ class OAuthConfiguration(
         return OAuth2Client(userInfoEndpoint.uri, oAuth2RestTemplate())
     }
 
-    // resttemplateはメンテナンスモードだったりはする
-    // https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#webmvc-resttemplate
-    // しかし、webclientを利用するにはwebfluxを依存に追加する必要があるが、 webclientのためだけに依存に追加したくないので、
-    // 今回はOauth2Clientでresttemplateの呼び出しをラップしておく。
-    // ラップしておくことで将来置き換える必要が生じてもコストを小さく済むはず。
+    // resttemplateはメンテナンスモードだったりはする => https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#webmvc-resttemplate
+    // しかし、webclientを利用するにはwebfluxを依存に追加する必要があるが、 webclientのためだけに追加したくない。
+    // そのため、今回はOauth2Clientでresttemplateの呼び出しをラップしておく。
+    // ラップしておくことで置き換えるコストを小さくできるはず。
+    @RequestScope
     @Bean
     fun oAuth2RestTemplate(): RestTemplate =
         builder.additionalInterceptors(oAuth2RestTemplateInterceptor())
             .additionalInterceptors(additionalHeaderInterceptor()) // 特定のCloud Providerを利用している場合などに、追加でヘッダーを共有される場合がある。
             .build()
 
+    @RequestScope
     @Bean
     fun oAuth2RestTemplateInterceptor(): ClientHttpRequestInterceptor =
         OAuth2RestTemplateInterceptor(

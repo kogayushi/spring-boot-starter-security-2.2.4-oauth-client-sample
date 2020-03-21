@@ -1,7 +1,6 @@
-package sample.oauth2
+package sample.adapter.infrastructure.spring.oauth2
 
 import org.slf4j.LoggerFactory
-import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.client.ClientHttpRequestExecution

@@ -1,11 +1,11 @@
-package sample.controller
+package sample.adapter.presentation.web
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
-import sample.oauth2.CustomOAuth2User
-import sample.oauth2.OAuth2Client
+import sample.adapter.infrastructure.spring.oauth2.CustomOAuth2User
+import sample.adapter.infrastructure.spring.oauth2.OAuth2Client
 
 
 @Controller

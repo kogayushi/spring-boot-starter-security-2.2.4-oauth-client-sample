@@ -1,4 +1,4 @@
-package sample.config
+package sample.adapter.infrastructure.spring
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

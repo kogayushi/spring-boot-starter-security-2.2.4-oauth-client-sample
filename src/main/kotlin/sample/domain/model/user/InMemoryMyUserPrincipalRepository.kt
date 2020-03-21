@@ -1,4 +1,4 @@
-package sample.user
+package sample.domain.model.user
 
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -12,12 +12,6 @@ class InMemoryMyUserPrincipalRepository {
     companion object {
         private val logger = LoggerFactory.getLogger(InMemoryMyUserPrincipalRepository::class.java)
         private val inmemory = ConcurrentHashMap<UUID, MyUserPrincipal>()
-    }
-
-    fun resolveBy(userId: UUID): MyUserPrincipal? {
-        val user = inmemory[userId]
-        logger.info("{} is fetched by userId({})", user, userId)
-        return user
     }
 
     fun resolveBy(providerId: String): MyUserPrincipal? {

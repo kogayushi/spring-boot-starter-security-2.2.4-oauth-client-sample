@@ -18,19 +18,19 @@ spring:
             client-secret: kPUvxFZfJcs58l5caRotR987 # http://localhost:8080でしか使えない。悪用不可能です！
             client-authentication-method: post # 通常はpostを指定する。Financial-grade APIだとpostとbasicは使用してはいけないらしい。
             authorization-grant-type: authorization_code # https://docs.spring.io/spring-security/site/docs/current/reference/html/oauth2.html#oauth2Client-client-registration
-            redirect-uri: http://localhost:8080/login/oauth2/code/google # 指定しなくてもこれと同じものが自動生成される
+            redirect-uri: http://localhost:8080/login/oauth2/code/google # googleの場合、指定しなくてもこれと同じものが自動生成される
             scope:
               - openid
               - profile
               - email
-            client-name: google # 任意設定項目。自動生成されるログインページのリンクに使われる。ログインページをカスタマイズするか無効にするのであれば、設定しても意味がない（と思う）。
+            client-name: google # 任意設定項目。自動生成されるログインページのリンク名に使われる。ログインページをカスタマイズするか無効にするのであれば、設定しても意味がない（と思う）。
           github:
             provider: github
             client-id: 8f4698875fd14e64b6f1
             client-secret: f0b9e69b9b3dac3358739ccd92ec73d92a31562c
             client-authentication-method: post
             authorization-grant-type: authorization_code
-            redirect-uri: http://localhost:8080/login/oauth2/code/github
+            redirect-uri: http://localhost:8080/login/oauth2/code/github # githubの場合、指定しなくてもこれと同じものが自動生成される
             scope: # githubはopenid connectをサポートしてないのでscopeにopenidを指定できない
               - read:user
             client-name: github
@@ -40,7 +40,7 @@ spring:
             client-secret: f8ffbac666be3ff56ff30363a585b10e
             client-authentication-method: post
             authorization-grant-type: authorization_code
-            redirect-uri: http://localhost:8080/login/oauth2/code/facebook
+            redirect-uri: http://localhost:8080/login/oauth2/code/facebook # facebookの場合、指定しなくてもこれと同じものが自動生成される
             scope: # facebookはopenid connectをサポートしてないのでscopeにopenidを指定できない
               - email
             client-name: facebook
@@ -49,13 +49,13 @@ spring:
             # oidcのconfiguration endpointやoauthのmetadata endpointが提供されている場合、
             # issuer-uriを設定すると必要な情報が自動的に設定される。
             issuer-uri: https://accounts.google.com
-            # configuration endpointにより、以下のコメントアウト部分の同じ内容が自動的に設定される
+            # discovery endpointにより、以下のコメントアウト部分の同じ内容が自動的に設定される
             # authorization-uri: "https://accounts.google.com/o/oauth2/v2/auth
             # token-uri: https://oauth2.googleapis.com/token
             # user-info-uri: https://openidconnect.googleapis.com/v1/userinfo
             # user-info-authentication-method: post
 
-            # refresh tokenを発行されるため同意画面を表示させる。googleの独自仕様だと思われる。
+            # refresh tokenを発行させるためにaccess_typeクエリも指定している。access_typeはgoogleの独自仕様だと思われる。
             # https://developers.google.com/identity/protocols/OAuth2WebServer#offline
             authorization-uri: "https://accounts.google.com/o/oauth2/v2/auth?access_type=offline"
             jwt-set-uri: https://www.googleapis.com/oauth2/v3/certs
