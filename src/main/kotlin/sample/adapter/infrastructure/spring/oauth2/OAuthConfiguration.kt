@@ -31,7 +31,7 @@ class OAuthConfiguration(
     fun oAuth2RestTemplate(): RestTemplate =
         builder
             .additionalInterceptors(oAuth2RestTemplateInterceptor())
-            .additionalInterceptors(additionalHeaderInterceptor()) // 特定のCloud Providerを利用している場合などに、追加でヘッダーを共有される場合がある。
+            .additionalInterceptors(additionalHeaderInterceptor()) // 特定のCloud Providerを利用している場合などに、ヘッダーの追加設定が必要な場合がある。
             .build()
 
     // thread safeな実装になっているので、シングルトンで問題ない（@RequestSession不要）。
