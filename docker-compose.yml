@@ -2,5 +2,15 @@ version: '3'
 services:
   redis:
     image: "redis:alpine"
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/app
     ports:
-      - "6379:6379"
+      - "8080:8080"
+    depends_on:
+      - redis
+    command: /bin/bash /app/docker-entrypoint.sh
