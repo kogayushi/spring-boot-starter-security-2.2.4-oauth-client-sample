@@ -12,9 +12,4 @@ class RedisConfiguration {
     fun configureRedisAction(): ConfigureRedisAction {
         return ConfigureRedisAction.NO_OP
     }
-
-    @Bean
-    fun lettuceConnectionFactory(): LettuceConnectionFactory {
-        return LettuceConnectionFactory()
-    }
 }

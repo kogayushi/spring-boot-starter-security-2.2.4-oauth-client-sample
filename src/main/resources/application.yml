@@ -3,6 +3,9 @@ server:
     session:
       timeout: 24h
 spring:
+  redis:
+    host: redis
+    port: 6379
   session:
     redis:
       namespace: oauth2-client-sample:session
